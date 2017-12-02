@@ -1,5 +1,9 @@
 import React,{Component} from 'react';
 
+const temp_unit={
+  'c':'Celsius','f':'Fahrenheit'
+};
+
 function toFahrenheit(temp){
   temp = (temp * 9 / 5) + 32;
   return Math.round(temp * 1000)/1000;
@@ -10,14 +14,19 @@ function toCelcius(temp){
   return Math.round(temp * 1000)/1000;
 }
 
+function convert(temp,converter){
+  if(temp===''){
+    return '';
+  }
+  return converter(temp);
+}
+
 class Converter extends Component{
   constructor(props){
     super(props);
     this.state={
       unit:'c',temp:''
     };
-  //  this.onCelsiusChange=this.onCelsiusChange.bind(this);
-  //  this.onFahrenheitChange=this.onFahrenheitChange.bind(this);
   this.handleOnChange=this.handleOnChange.bind(this);
   }
 
@@ -29,8 +38,8 @@ class Converter extends Component{
 
     let unit=this.state.unit;
     const temp=this.state.temp;
-    const celcius= unit==='f' ? toCelcius(temp) : temp;
-    const fahrenheit= unit==='c' ? toFahrenheit(temp) : temp;
+    const celcius= unit==='f' ? convert(temp,toCelcius) : temp;
+    const fahrenheit= unit==='c' ? convert(temp,toFahrenheit) : temp;
 
     return(
       <div>
@@ -56,7 +65,7 @@ class TempUnit extends Component{
   render(){
     return(
       <fieldset>
-        <legend>Temperature in Fahrenheit</legend>
+        <legend>Temperature in {temp_unit[this.props.unit]}</legend>
         <input type='text' value={this.props.temp} onChange={this.handleOnChange} />
       </fieldset>
     )
