@@ -14,7 +14,7 @@ class Converter extends Component{
   constructor(props){
     super(props);
     this.state={
-      celcius:'',fahrenheit:''
+      unit:'c',temp:''
     };
   //  this.onCelsiusChange=this.onCelsiusChange.bind(this);
   //  this.onFahrenheitChange=this.onFahrenheitChange.bind(this);
@@ -22,53 +22,20 @@ class Converter extends Component{
   }
 
   handleOnChange(e,unit){
-
-    switch (unit) {
-      case 'c':
-          this.setState({
-            celcius:e.target.value,
-            fahrenheit:toFahrenheit(e.target.value)
-          });
-        break;
-      case 'f':
-          this.setState({
-            celcius:toCelcius(e.target.value),
-            fahrenheit:e.target.value
-          });
-        break;
-
-      default:
-        console.log('invalud unit');
-    }
-
-    e.preventDefault();
-
+    this.setState({unit:unit,temp:e});
   }
-
-/*
-  onCelsiusChange(e){
-    console.log(e.target.value)
-    this.setState({
-      celcius:e.target.value,
-      fahrenheit:toFahrenheit(e.target.value)
-    });
-    e.preventDefault();
-  }
-
-  onFahrenheitChange(e){
-    console.log(e.target.value)
-    this.setState({
-      celcius:toCelcius(e.target.value),
-      fahrenheit:e.target.value
-    });
-    e.preventDefault();
-  } */
 
   render(){
+
+    let unit=this.state.unit;
+    const temp=this.state.temp;
+    const celcius= unit==='f' ? toCelcius(temp) : temp;
+    const fahrenheit= unit==='c' ? toFahrenheit(temp) : temp;
+
     return(
       <div>
-        <TempUnit temp={this.state.celcius} handleOnChange={this.handleOnChange} unit='c' />
-        <TempUnit temp={this.state.fahrenheit} handleOnChange={this.handleOnChange} unit='f' />
+        <TempUnit temp={celcius} handleOnChange={this.handleOnChange} unit='c' />
+        <TempUnit temp={fahrenheit} handleOnChange={this.handleOnChange} unit='f' />
       </div>
     )
   }
@@ -81,7 +48,8 @@ class TempUnit extends Component{
   }
 
   handleOnChange(e){
-    this.props.handleOnChange(e,this.props.unit);
+    console.log('unit:',this.props.unit);
+    this.props.handleOnChange(e.target.value,this.props.unit);
     e.preventDefault();
   }
 
